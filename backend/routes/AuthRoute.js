@@ -36,7 +36,7 @@ router.post('/login',async (req,res)=>{
 });
 
 router.post('/register',async (req,res)=>{
-    const {name,email,password} = req.body;
+    const {firstName, lastName,email,password} = req.body;
     try {
         const user = await User.findOne({email});
         if(user){
@@ -48,7 +48,8 @@ router.post('/register',async (req,res)=>{
         const otpExpiry = new Date(Date.now() + 5 * 60 * 1000); 
 
         await User.create({
-            name,
+            firstName,
+            lastName,
             email,
             password:hashed,
             otp,
@@ -89,7 +90,7 @@ router.post('/verify-otp',async (req,res)=>{
         user.otp = null;
         user.otpExpiry = null;
         await user.save();
-        
+
         res.status(200).json({message:"User verified successfully"});
     } catch (error) {
         console.log(error);
