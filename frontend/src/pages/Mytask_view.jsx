@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-
 const MyTask_view = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -12,7 +11,13 @@ const MyTask_view = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
+  const Logo = () => (
+    <div className="h-9 w-9 rounded-full bg-white/20 grid place-items-center ring-2 ring-white/30">
+      <div className="h-7 w-7 rounded-full bg-white grid place-items-center">
+        <span className="font-semibold text-[#5B6EA3]">S</span>
+      </div>
+    </div>
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +38,7 @@ const MyTask_view = () => {
       const token = localStorage.getItem("token");
       try {
         const res = await axios.get("http://localhost:5000/api/tasks", {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
         setTasks(res.data);
       } catch (error) {
@@ -50,15 +55,9 @@ const MyTask_view = () => {
       {/* Sidebar */}
       <div className="w-64 bg-[#d9d9d9] flex flex-col justify-between">
         <div>
-          <div className="flex items-center px-4 py-4 border-b border-gray-300">
-            <img
-              src="../assets/odoologo.png"
-              alt="Logo"
-              className="h-10 w-10"
-            />
-            <span className="ml-2 font-bold text-lg text-[#333]">
-              CompanyName
-            </span>
+          <div className="flex items-center space-x-3">
+            <Logo />
+            <span className="text-xl font-semibold">SynergySphere</span>
           </div>
 
           <div className="mt-6 flex flex-col space-y-4 px-4">
@@ -80,7 +79,7 @@ const MyTask_view = () => {
         {/* User Section */}
         <div className="flex items-center bg-[#4a6fcf] text-white px-4 py-3">
           <User className="mr-2" />
-          <span className="text-sm">{user?.name || "User "} </span>
+          <span className="text-sm">{user?.fullName || "User "} </span>
           <Settings className="ml-auto" />
         </div>
       </div>
@@ -91,12 +90,12 @@ const MyTask_view = () => {
         <div className="flex items-center bg-[#5b6ea3] px-6 py-4 text-white">
           <div className="flex-1">
             <div className="relative w-1/3">
-              <input
+              {/* <input
                 type="text"
                 placeholder="Search"
                 className="w-full rounded-full py-2 px-4 text-black focus:outline-none"
               />
-              <Search className="absolute right-3 top-2 text-gray-600" />
+              <Search className="absolute right-3 top-2 text-gray-600" /> */}
             </div>
           </div>
           <div className="relative mr-4">
@@ -114,8 +113,8 @@ const MyTask_view = () => {
         </div>
 
         {/* Task Cards */}
-        <div className="flex-1 p-6 grid grid-cols-3 gap-6">
-          {[1, 2].map((id) => (
+        <div className="flex-1 p-6 grid grid-cols-2 gap-6">
+          {/* {[1, 2].map((id) => (
             <div
               key={id}
               className="bg-[#f1eef6] rounded-md shadow-sm border border-gray-200 p-4 flex flex-col justify-between"
@@ -138,7 +137,51 @@ const MyTask_view = () => {
                 </div>
               </div>
             </div>
-          ))}
+          ))} */}
+          <div
+              // key={id}
+              className="bg-[#f1eef6] rounded-md shadow-sm h-35 border border-gray-200 p-4 flex flex-col justify-between"
+            >
+              <div>
+                <div className="font-medium text-base mb-2">
+                  Create a login page
+                </div>
+                <p className="text-sm text-gray-600 mb-4">
+                  There is NO Description
+                </p>
+              </div>
+              <div className="flex items-center justify-between text-gray-600 text-xs">
+                <div className="flex items-center">
+                  <User className="mr-2" size={16} /> {user?.fullName || "User "}
+                </div>
+                <div className="flex items-center space-x-4">
+                  <span>Due: 15/09/25</span>
+                  <span>High</span>
+                </div>
+              </div>
+            </div>
+            <div
+              // key={id}
+              className="bg-[#f1eef6] rounded-md shadow-sm h-35 border border-gray-200 p-4 flex flex-col justify-between"
+            >
+              <div>
+                <div className="font-medium text-base mb-2">
+                  Create a dashboard page
+                </div>
+                <p className="text-sm text-gray-600 mb-4">
+                  make good UI/UX
+                </p>
+              </div>
+              <div className="flex items-center justify-between text-gray-600 text-xs">
+                <div className="flex items-center">
+                  <User className="mr-2" size={16} /> {user?.fullName || "User "}
+                </div>
+                <div className="flex items-center space-x-4">
+                  <span>Due: 16/09/25</span>
+                  <span>High</span>
+                </div>
+              </div>
+            </div>
         </div>
 
         {/* Floating Add Task Button */}

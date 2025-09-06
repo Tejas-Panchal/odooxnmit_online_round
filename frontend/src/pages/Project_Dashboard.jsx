@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-
 const Project_Dashboard = () => {
   const navigate = useNavigate();
 
@@ -44,26 +43,31 @@ const Project_Dashboard = () => {
         setLoading(false);
       }
     };
-    
+
     fetchProjects();
     fetchData();
-  }, []);      
-  
+  }, []);
+
   // console.log(projects);
   console.log(user);
- console.log(projects);
+  console.log(projects);
 
+  const Logo = () => (
+    <div className="h-9 w-9 rounded-full bg-white/20 grid place-items-center ring-2 ring-white/30">
+      <div className="h-7 w-7 rounded-full bg-white grid place-items-center">
+        <span className="font-semibold text-[#5B6EA3]">S</span>
+      </div>
+    </div>
+  );
 
   return (
     <div className="flex h-screen bg-[#f5f5f5]">
       {/* Sidebar */}
       <div className="w-64 bg-[#d9d9d9] flex flex-col justify-between">
         <div>
-          <div className="flex items-center px-4 py-4 border-b border-gray-300">
-            <img src="frontend/oddologo.png" alt="Logo" className="h-10 w-10" />
-            <span className="ml-2 font-bold text-lg text-[#333]">
-              SynergySphere
-            </span>
+          <div className="flex items-center space-x-3">
+            <Logo />
+            <span className="text-xl font-semibold">SynergySphere</span>
           </div>
 
           <div className="mt-6 flex flex-col space-y-4 px-4">
@@ -96,12 +100,12 @@ const Project_Dashboard = () => {
         <div className="flex items-center bg-[#5b6ea3] px-6 py-4 text-white">
           <div className="flex-1">
             <div className="relative w-1/3">
-              <input
+              {/* <input
                 type="text"
                 placeholder="Search"
                 className="w-full rounded-full py-2 px-4 text-black focus:outline-none"
               />
-              <Search className="absolute right-3 top-2 text-gray-600" />
+              <Search className="absolute right-3 top-2 text-gray-600" /> */}
             </div>
           </div>
           <div className="relative mr-4">
@@ -119,22 +123,22 @@ const Project_Dashboard = () => {
         </div>
 
         {/* Project Cards */}
-        <div className="flex-1 p-6 grid grid-cols-2 gap-6">
+        <div className="flex-1 p-6 grid grid-cols-2 grid-rows-3 gap-6">
           {projects.map((project) => (
             <div
               key={project._id}
-              className=" rounded-md shadow-sm border border-gray-200 p-4 flex flex-col justify-between"
+              className=" rounded-md shadow-sm border h-34 border-gray-200 p-4 flex flex-col justify-start"
             >
               <div className="font-medium text-base mb-6">{project.name}</div>
-              {project.description}
+              <div className="text-gray-600 text-sm mb-4">{project.description}</div>
               <div className="flex items-center justify-between text-gray-600 text-xs">
-
                 <div className="flex items-center">
                   <User className="mr-2" size={16} /> {user?.fullName}
                 </div>
                 <div className="flex items-center space-x-4">
                   <span>
-                    Daedline: {project.deadline
+                    Daedline:{" "}
+                    {project.deadline
                       ? format(new Date(project.deadline), "dd MMM yyyy")
                       : "No deadline"}
                   </span>

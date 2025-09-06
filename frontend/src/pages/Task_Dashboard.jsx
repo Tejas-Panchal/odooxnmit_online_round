@@ -8,13 +8,12 @@ const Task_Dashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
-
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
       try {
         const res = await axios.get("http://localhost:5000/api/auth/me", {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
         setUser(res.data);
       } catch (error) {
@@ -24,13 +23,21 @@ const Task_Dashboard = () => {
     fetchUser();
   }, []);
 
+  const Logo = () => (
+    <div className="h-9 w-9 rounded-full bg-white/20 grid place-items-center ring-2 ring-white/30">
+      <div className="h-7 w-7 rounded-full bg-white grid place-items-center">
+        <span className="font-semibold text-[#5B6EA3]">S</span>
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex h-screen bg-[#f5f5f5]">
       {/* Sidebar */}
       <div className="w-64 bg-[#d9d9d9] flex flex-col justify-between">
         <div>
           <div className="flex items-center px-4 py-4 border-b border-gray-300">
-            <img src="frotend/oddologo.png" alt="Logo" className="h-10 w-10" />
+            <Logo />
             <span className="ml-2 font-bold text-lg text-[#333]">
               SynergySphere
             </span>

@@ -31,6 +31,14 @@ const OtpPage = () => {
     }
   };
 
+  const Logo = () => (
+    <div className="h-9 w-9 rounded-full bg-white/20 grid place-items-center ring-2 ring-white/30">
+      <div className="h-7 w-7 rounded-full bg-white grid place-items-center">
+        <span className="font-semibold text-[#5B6EA3]">S</span>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-[#F5F5F5] flex flex-col">
       {/* Header */}
@@ -42,7 +50,7 @@ const OtpPage = () => {
                 <span className="font-semibold text-[#5B6EA3]">S</span>
               </div>
             </div>
-            <span className="text-xl font-semibold">CompanyName</span>
+            <span className="text-xl font-semibold">SynergySphere</span>
           </div>
         </div>
       </header>

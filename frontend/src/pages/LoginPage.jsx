@@ -42,6 +42,7 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError("");
+    // navigate("/project-dashboard");
     try {
       const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
       localStorage.setItem("token", res.data.token);
@@ -59,7 +60,7 @@ export default function LoginPage() {
         <div className="mx-auto max-w-6xl px-6 h-14 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <Logo />
-            <span className="text-xl font-semibold">CompanyName</span>
+            <span className="text-xl font-semibold">SynergySphere</span>
           </div>
           <nav className="hidden sm:flex items-center space-x-8">
             <a className="hover:opacity-90" href="#">Home</a>
