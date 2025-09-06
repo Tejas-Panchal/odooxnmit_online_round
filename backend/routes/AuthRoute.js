@@ -78,8 +78,6 @@ router.post('/verify-otp',async (req,res)=>{
         }
         
         if(user.otp !== otp){
-            console.log(otp);
-            console.log(user.otp);
             return res.status(400).json({message:"Invalid OTP"});
         }
 
@@ -91,6 +89,7 @@ router.post('/verify-otp',async (req,res)=>{
         user.otp = null;
         user.otpExpiry = null;
         await user.save();
+        
         res.status(200).json({message:"User verified successfully"});
     } catch (error) {
         console.log(error);

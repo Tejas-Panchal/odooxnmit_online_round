@@ -26,17 +26,15 @@ const userSchema = new Schema({
         type: String,
         default: ''
     },
-    isVaerified: {
+    isVerified: {
         type: Boolean,
         default: false
     },
     otp: {
-        type: Number,
-        default: null
+        type: String,
     },
     otpExpiry: {
         type: Date,
-        default: null
     }
 }, {
     // Automatically add `createdAt` and `updatedAt` fields
