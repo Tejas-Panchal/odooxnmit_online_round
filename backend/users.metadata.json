@@ -1,0 +1,42 @@
+{
+  "options": {
+    "validator": {
+      "$jsonSchema": {
+        "bsonType": "object",
+        "required": ["emp_id", "name", "email", "password", "role"],
+        "properties": {
+          "emp_id": { "bsonType": "string", "description": "Employee ID" },
+          "name": { "bsonType": "string", "description": "Full name" },
+          "email": {
+            "bsonType": "string",
+            "pattern": "^.+@.+\\..+$",
+            "description": "Valid email required"
+          },
+          "password": {
+            "bsonType": "string",
+            "description": "Hashed password"
+          },
+          "photo": {
+            "bsonType": "string",
+            "description": "Profile picture URL"
+          },
+          "role": {
+            "bsonType": "string",
+            "enum": ["Manager", "User"],
+            "description": "User role"
+          }
+        }
+      }
+    }
+  },
+  "indexes": [
+    {
+      "v": { "$numberInt": "2" },
+      "key": { "_id": { "$numberInt": "1" } },
+      "name": "_id_"
+    }
+  ],
+  "uuid": "855dcc54e1704df9803af8300f83e079",
+  "collectionName": "users",
+  "type": "collection"
+}

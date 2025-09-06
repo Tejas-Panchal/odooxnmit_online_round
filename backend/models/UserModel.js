@@ -3,10 +3,22 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
     // Full name of the user
-    name: {
+    firstName: {
         type: String,
         required: true,
         trim: true
+    },
+    lastName: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    fullName: {
+        type: String,
+        trim: true,
+        get: function() {
+            return `${this.firstName} ${this.lastName}`;
+        }
     },
     // User's email, must be unique for login
     email: {
@@ -32,9 +44,19 @@ const userSchema = new Schema({
     },
     otp: {
         type: String,
+        default: null
     },
     otpExpiry: {
         type: Date,
+        default: null
+    },
+    otpExpiry: {
+        type: Date,
+    },
+    role: {
+        type: String,
+        enum: ['user', 'manager'],
+        default: 'user'
     }
 }, {
     // Automatically add `createdAt` and `updatedAt` fields

@@ -5,6 +5,7 @@ import bcryptjs from "bcryptjs";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import transport from "../config/transport.js";
+import auth from "../middleware/auth.js";
 dotenv.config();
 
 const router = express.Router();
@@ -17,18 +18,22 @@ router.post('/login',async (req,res)=>{
         if(!user){
             return res.status(400).json({message:"User does not exist"});
         }
-        
         if(!user.isVerified){
             return res.status(400).json({message:"User is not verified"});
         }
-
         const isMatch = await bcryptjs.compare(password,user.password);
         if(!isMatch){
             return res.status(400).json({message:"Invalid password"});
         }
-        const token = jwt.sign({id:user._id},process.env.JWT_SECRET,{expiresIn:"1h"});
+        const token = jwt.sign({id:user._id},process.env.JWT_SECRET,{expiresIn:"10d"});
         res.status(200).json({message:"User logged in successfully",token});
     } catch (error) {
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({message: "Invalid token format"});
+        }
+        if (error.name === 'TokenExpiredError') {
+            return res.status(401).json({message: "Token expired"});
+        }
         console.log(error);
         res.status(500).json({message:"Internal server error"});
     }
@@ -36,7 +41,7 @@ router.post('/login',async (req,res)=>{
 });
 
 router.post('/register',async (req,res)=>{
-    const {name,email,password} = req.body;
+    const {firstName, lastName,email,password} = req.body;
     try {
         const user = await User.findOne({email});
         if(user){
@@ -48,7 +53,8 @@ router.post('/register',async (req,res)=>{
         const otpExpiry = new Date(Date.now() + 5 * 60 * 1000); 
 
         await User.create({
-            name,
+            firstName,
+            lastName,
             email,
             password:hashed,
             otp,
@@ -89,11 +95,26 @@ router.post('/verify-otp',async (req,res)=>{
         user.otp = null;
         user.otpExpiry = null;
         await user.save();
-        
         res.status(200).json({message:"User verified successfully"});
     } catch (error) {
         console.log(error);
         res.status(500).json({message:"Internal server error"});
+    }
+});
+
+router.get('/me',auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password');
+        res.json(user);
+    } catch (err) {
+        if (err.name === 'JsonWebTokenError') {
+            return res.status(401).json({message: "Invalid token format"});
+        }
+        if (err.name === 'TokenExpiredError') {
+            return res.status(401).json({message: "Token expired"});
+        }
+        console.error(err.message);
+        res.status(500).send('Server Error');
     }
 });
 
