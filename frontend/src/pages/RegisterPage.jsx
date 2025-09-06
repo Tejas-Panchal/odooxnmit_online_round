@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
 
 const RegisterPage = () => {
 
-    const [name,setName] = useState("");
+    const [firstName,setFirstName] = useState("");
+    const [lastName,setLastName] = useState("");
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
-    const [confirmPassword,setConfirmPassword] = useState("");
     const [loading,setLoading] = useState(false);
     const [features,setFeatures] = useState("register");
     const [message,setMessage] = useState("");
@@ -18,15 +19,9 @@ const RegisterPage = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
         setLoading(true);
-        if(password !== confirmPassword){
-            setLoading(false);
-            setMessage("Password and confirm password do not match");
-            return;
-        }
         try {
-            const response = await axios.post('http://localhost:5000/api/auth/register', {name, email, password });
+            const response = await axios.post('http://localhost:5000/api/auth/register', { firstName, lastName, email, password });
             
-
             setLoading(false);
             setFeatures("verify");
 
@@ -68,17 +63,30 @@ const RegisterPage = () => {
         {features === 'register' && (
           <form className="mt-8 space-y-6" onSubmit={handleRegister}>
             <div className="rounded-md shadow-sm -space-y-px">
-              <div>
+                <div>
                 <label htmlFor="name" className="sr-only">Full Name</label>
                 <input
-                  id="name"
-                  name="name"
+                  id="firstName"
+                  name="firstName"
                   type="text"
                   required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Full Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  placeholder="First Name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="name" className="sr-only">Full Name</label>
+                <input
+                  id="lastName"
+                  name="lastName"
+                  type="text"
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Last Name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                 />
               </div>
               <div>
@@ -105,19 +113,6 @@ const RegisterPage = () => {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="confirmPassword" className="sr-only">Confirm Password</label>
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Confirm Password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
             </div>
@@ -165,9 +160,9 @@ const RegisterPage = () => {
         )}
 
         <div className="text-sm text-center">
-          <a href="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
+          <Link to="/login" className="text-sm text-gray-600 hover:text-gray-800">
             Already have an account? Sign in
-          </a>
+          </Link>
         </div>
       </div>
     </div>

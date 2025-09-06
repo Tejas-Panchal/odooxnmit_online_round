@@ -3,7 +3,12 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
     // Full name of the user
-    name: {
+    firstName: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    lastName: {
         type: String,
         required: true,
         trim: true
@@ -26,17 +31,20 @@ const userSchema = new Schema({
         type: String,
         default: ''
     },
-    isVaerified: {
+    isVerified: {
         type: Boolean,
         default: false
     },
     otp: {
-        type: Number,
+        type: String,
         default: null
     },
     otpExpiry: {
         type: Date,
         default: null
+    },
+    otpExpiry: {
+        type: Date,
     }
 }, {
     // Automatically add `createdAt` and `updatedAt` fields
