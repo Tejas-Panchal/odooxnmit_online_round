@@ -1,1 +1,33 @@
-{"options":{"validator":{"$jsonSchema":{"bsonType":"object","required":["message_id","project_id","user_id","message","created_at"],"properties":{"message_id":{"bsonType":"string"},"project_id":{"bsonType":"string"},"user_id":{"bsonType":"string"},"message":{"bsonType":"string"},"created_at":{"bsonType":"date"}}}}},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"69a2e4c5ac05489087cf7b7c5ec85caf","collectionName":"discussions","type":"collection"}
+{
+  "options": {
+    "validator": {
+      "$jsonSchema": {
+        "bsonType": "object",
+        "required": [
+          "message_id",
+          "project_id",
+          "user_id",
+          "message",
+          "created_at"
+        ],
+        "properties": {
+          "message_id": { "bsonType": "string" },
+          "project_id": { "bsonType": "string" },
+          "user_id": { "bsonType": "string" },
+          "message": { "bsonType": "string" },
+          "created_at": { "bsonType": "date" }
+        }
+      }
+    }
+  },
+  "indexes": [
+    {
+      "v": { "$numberInt": "2" },
+      "key": { "_id": { "$numberInt": "1" } },
+      "name": "_id_"
+    }
+  ],
+  "uuid": "69a2e4c5ac05489087cf7b7c5ec85caf",
+  "collectionName": "discussions",
+  "type": "collection"
+}

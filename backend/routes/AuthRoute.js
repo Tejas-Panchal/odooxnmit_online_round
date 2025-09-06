@@ -5,6 +5,7 @@ import bcryptjs from "bcryptjs";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import transport from "../config/transport.js";
+import auth from "../middleware/auth.js";
 dotenv.config();
 
 const router = express.Router();
@@ -96,5 +97,16 @@ router.post('/verify-otp',async (req,res)=>{
         res.status(500).json({message:"Internal server error"});
     }
 });
+
+router.get('/me',auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password');
+        res.json(user);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
 
 export default router;

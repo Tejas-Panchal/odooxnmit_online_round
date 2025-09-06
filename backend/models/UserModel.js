@@ -13,6 +13,13 @@ const userSchema = new Schema({
         required: true,
         trim: true
     },
+    fullName: {
+        type: String,
+        trim: true,
+        get: function() {
+            return `${this.firstName} ${this.lastName}`;
+        }
+    },
     // User's email, must be unique for login
     email: {
         type: String,
@@ -45,6 +52,11 @@ const userSchema = new Schema({
     },
     otpExpiry: {
         type: Date,
+    },
+    role: {
+        type: String,
+        enum: ['user', 'manager'],
+        default: 'user'
     }
 }, {
     // Automatically add `createdAt` and `updatedAt` fields
