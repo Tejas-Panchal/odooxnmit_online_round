@@ -1,27 +1,83 @@
 import React from "react";
+import { format } from "date-fns";
 import { Bell, Search, Settings, User, Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-const Dashboard = () => {
+
+const Project_Dashboard = () => {
+  const navigate = useNavigate();
+
+  const [projects, setProjects] = useState([]);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/projects", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setProjects(response.data);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    };
+
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/auth/me", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setUser(response.data);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    };
+    
+    fetchProjects();
+    fetchData();
+  }, []);      
+  
+  // console.log(projects);
+  console.log(user);
+ console.log(projects);
+
+
   return (
     <div className="flex h-screen bg-[#f5f5f5]">
       {/* Sidebar */}
       <div className="w-64 bg-[#d9d9d9] flex flex-col justify-between">
         <div>
           <div className="flex items-center px-4 py-4 border-b border-gray-300">
-            <img
-              src="frontend/oddologo.png"
-              alt="Logo"
-              className="h-10 w-10"
-            />
-            <span className="ml-2 font-bold text-lg text-[#333]">SynergySphere</span>
+            <img src="frontend/oddologo.png" alt="Logo" className="h-10 w-10" />
+            <span className="ml-2 font-bold text-lg text-[#333]">
+              SynergySphere
+            </span>
           </div>
 
           <div className="mt-6 flex flex-col space-y-4 px-4">
-            <button className="bg-[#4a6fcf] text-white py-3 px-4 rounded-md text-left text-sm font-medium">
+            <button
+              onClick={() => navigate("/project-dashboard")}
+              className="bg-[#4a6fcf] text-white py-3 px-4 rounded-md text-left text-sm font-medium"
+            >
               Projects
             </button>
-            <button className="bg-[#4a6fcf] text-white py-3 px-4 rounded-md text-left text-sm font-medium">
-              My tasks
+            <button
+              onClick={() => navigate("/mytask-view")}
+              className="bg-[#4a6fcf] text-white py-3 px-4 rounded-md text-left text-sm font-medium"
+            >
+              My Tasks
             </button>
           </div>
         </div>
@@ -29,7 +85,7 @@ const Dashboard = () => {
         {/* User Section */}
         <div className="flex items-center bg-[#4a6fcf] text-white px-4 py-3">
           <User className="mr-2" />
-          <span className="text-sm">Test User</span>
+          <span className="text-sm">{user?.fullName}</span>
           <Settings className="ml-auto" />
         </div>
       </div>
@@ -64,19 +120,25 @@ const Dashboard = () => {
 
         {/* Project Cards */}
         <div className="flex-1 p-6 grid grid-cols-2 gap-6">
-          {[1, 2].map((id) => (
+          {projects.map((project) => (
             <div
-              key={id}
-              className="bg-[#f1eef6] rounded-md shadow-sm border border-gray-200 p-4 flex flex-col justify-between"
+              key={project._id}
+              className=" rounded-md shadow-sm border border-gray-200 p-4 flex flex-col justify-between"
             >
-              <div className="font-medium text-base mb-6">Project 1</div>
+              <div className="font-medium text-base mb-6">{project.name}</div>
+              {project.description}
               <div className="flex items-center justify-between text-gray-600 text-xs">
+
                 <div className="flex items-center">
-                  <User className="mr-2" size={16} /> Test User
+                  <User className="mr-2" size={16} /> {user?.fullName}
                 </div>
                 <div className="flex items-center space-x-4">
-                  <span>10/09/25</span>
-                  <span>10 tasks</span>
+                  <span>
+                    Daedline: {project.deadline
+                      ? format(new Date(project.deadline), "dd MMM yyyy")
+                      : "No deadline"}
+                  </span>
+                  <span>{project.priority}</span>
                 </div>
               </div>
             </div>
@@ -85,6 +147,7 @@ const Dashboard = () => {
 
         {/* Floating Add Project Button */}
         <button
+          onClick={() => navigate("/new-project")}
           className="absolute bottom-6 right-6 bg-gradient-to-r from-[#4a6fcf] to-[#5b6ea3] hover:from-[#5b6ea3] hover:to-[#4a6fcf] text-white rounded-full p-4 shadow-lg transition-transform transform hover:scale-105"
         >
           <Plus className="h-6 w-6" />
@@ -94,4 +157,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Project_Dashboard;

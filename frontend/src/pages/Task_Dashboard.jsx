@@ -1,26 +1,52 @@
 import React from "react";
 import { Bell, Search, Settings, User, Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const Dashboard = () => {
+const Task_Dashboard = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const res = await axios.get("http://localhost:5000/api/auth/me", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setUser(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUser();
+  }, []);
+
   return (
     <div className="flex h-screen bg-[#f5f5f5]">
       {/* Sidebar */}
       <div className="w-64 bg-[#d9d9d9] flex flex-col justify-between">
         <div>
           <div className="flex items-center px-4 py-4 border-b border-gray-300">
-            <img
-              src="frotend/oddologo.png"
-              alt="Logo"
-              className="h-10 w-10"
-            />
-            <span className="ml-2 font-bold text-lg text-[#333]">SynergySphere</span>
+            <img src="frotend/oddologo.png" alt="Logo" className="h-10 w-10" />
+            <span className="ml-2 font-bold text-lg text-[#333]">
+              SynergySphere
+            </span>
           </div>
 
           <div className="mt-6 flex flex-col space-y-4 px-4">
-            <button className="bg-[#4a6fcf] text-white py-3 px-4 rounded-md text-left text-sm font-medium">
+            <button
+              onClick={() => navigate("/project-dashboard")}
+              className="bg-[#4a6fcf] text-white py-3 px-4 rounded-md text-left text-sm font-medium"
+            >
               Projects
             </button>
-            <button className="bg-[#4a6fcf] text-white py-3 px-4 rounded-md text-left text-sm font-medium">
+            <button
+              onClick={() => navigate("/mytask-view")}
+              className="bg-[#4a6fcf] text-white py-3 px-4 rounded-md text-left text-sm font-medium"
+            >
               My tasks
             </button>
           </div>
@@ -29,7 +55,7 @@ const Dashboard = () => {
         {/* User Section */}
         <div className="flex items-center bg-[#4a6fcf] text-white px-4 py-3">
           <User className="mr-2" />
-          <span className="text-sm">Test User</span>
+          <span className="text-sm">{user?.name || "User"}</span>
           <Settings className="ml-auto" />
         </div>
       </div>
@@ -76,7 +102,6 @@ const Dashboard = () => {
                 </div>
                 <div className="flex items-center space-x-4">
                   <span>10/09/25</span>
-                  
                 </div>
               </div>
             </div>
@@ -84,9 +109,7 @@ const Dashboard = () => {
         </div>
 
         {/* Floating Add Project Button */}
-        <button
-          className="absolute bottom-6 right-6 bg-gradient-to-r from-[#4a6fcf] to-[#5b6ea3] hover:from-[#5b6ea3] hover:to-[#4a6fcf] text-white rounded-full p-4 shadow-lg transition-transform transform hover:scale-105"
-        >
+        <button className="absolute bottom-6 right-6 bg-gradient-to-r from-[#4a6fcf] to-[#5b6ea3] hover:from-[#5b6ea3] hover:to-[#4a6fcf] text-white rounded-full p-4 shadow-lg transition-transform transform hover:scale-105">
           <Plus className="h-6 w-6" />
         </button>
       </div>
@@ -94,4 +117,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Task_Dashboard;

@@ -1,7 +1,50 @@
 import React from "react";
 import { Bell, Search, Settings, User, Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const MyTasks = () => {
+
+const MyTask_view = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/auth/me", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setUser(response.data);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    };
+    const fetchTasks = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const res = await axios.get("http://localhost:5000/api/tasks", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setTasks(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchTasks();
+    fetchData();
+  }, []);
+
   return (
     <div className="flex h-screen bg-[#f5f5f5]">
       {/* Sidebar */}
@@ -9,19 +52,27 @@ const MyTasks = () => {
         <div>
           <div className="flex items-center px-4 py-4 border-b border-gray-300">
             <img
-              src="frontend/oddologo.png"
+              src="../assets/odoologo.png"
               alt="Logo"
               className="h-10 w-10"
             />
-            <span className="ml-2 font-bold text-lg text-[#333]">CompanyName</span>
+            <span className="ml-2 font-bold text-lg text-[#333]">
+              CompanyName
+            </span>
           </div>
 
           <div className="mt-6 flex flex-col space-y-4 px-4">
-            <button className="bg-[#4a6fcf] text-white py-3 px-4 rounded-md text-left text-sm font-medium">
+            <button
+              onClick={() => navigate("/project-dashboard")}
+              className="bg-[#4a6fcf] text-white py-3 px-4 rounded-md text-left text-sm font-medium"
+            >
               Projects
             </button>
-            <button className="bg-[#4a6fcf] text-white py-3 px-4 rounded-md text-left text-sm font-medium">
-              My tasks
+            <button
+              onClick={() => navigate("/mytask-view")}
+              className="bg-[#4a6fcf] text-white py-3 px-4 rounded-md text-left text-sm font-medium"
+            >
+              My Tasks
             </button>
           </div>
         </div>
@@ -29,7 +80,7 @@ const MyTasks = () => {
         {/* User Section */}
         <div className="flex items-center bg-[#4a6fcf] text-white px-4 py-3">
           <User className="mr-2" />
-          <span className="text-sm">Test User</span>
+          <span className="text-sm">{user?.name || "User "} </span>
           <Settings className="ml-auto" />
         </div>
       </div>
@@ -70,7 +121,9 @@ const MyTasks = () => {
               className="bg-[#f1eef6] rounded-md shadow-sm border border-gray-200 p-4 flex flex-col justify-between"
             >
               <div>
-                <div className="font-medium text-base mb-2">Task Title {id}</div>
+                <div className="font-medium text-base mb-2">
+                  Task Title {id}
+                </div>
                 <p className="text-sm text-gray-600 mb-4">
                   Short description or attached PDF info.
                 </p>
@@ -90,6 +143,7 @@ const MyTasks = () => {
 
         {/* Floating Add Task Button */}
         <button
+          onClick={() => navigate("/new-task")}
           className="absolute bottom-6 right-6 bg-gradient-to-r from-[#4a6fcf] to-[#5b6ea3] hover:from-[#5b6ea3] hover:to-[#4a6fcf] text-white rounded-full p-4 shadow-lg transition-transform transform hover:scale-105"
         >
           <Plus className="h-6 w-6" />
@@ -99,4 +153,4 @@ const MyTasks = () => {
   );
 };
 
-export default MyTasks;
+export default MyTask_view;

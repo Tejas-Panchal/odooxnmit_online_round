@@ -5,9 +5,9 @@ const ProjectsSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 		unique: true,
-		description: 'Unique project ID'
+		description: 'Unique project identifier'
 	},
-	project_name: {
+	name: {
 		type: String,
 		required: true,
 		description: 'Project title'
@@ -41,6 +41,10 @@ const ProjectsSchema = new mongoose.Schema({
 	},
 	tags: [{
 		type: String
+	}],
+	teamMembers: [{
+		type: String,
+		description: 'emp_id of team member'
 	}]
 });
 
