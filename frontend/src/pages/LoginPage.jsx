@@ -73,7 +73,6 @@ const LoginPage = () => {
             </button>
           </div>
           <div  className="text-sm text-center">
-
           <Link to="/register" className="text-sm text-gray-600 hover:text-gray-800">
             Don't have an account? Sign up
           </Link>
